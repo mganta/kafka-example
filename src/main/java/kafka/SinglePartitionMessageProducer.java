@@ -15,17 +15,17 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 public class SinglePartitionMessageProducer implements Runnable {
 
 	private static String message = "Hello Kafka partition!!!";
-	private static Producer<String, String> producer;
 	private final AtomicBoolean closed = new AtomicBoolean(false);
 
 	private static Properties properties;
 
 	public SinglePartitionMessageProducer(Properties props) {
 		properties = props;
-		producer = new KafkaProducer<String, String>(props);
+		
 	}
 
 	public void run() {
+		Producer<String, String> producer = new KafkaProducer<String, String>(properties);
 		try {
 			while (!closed.get()) {
 				ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>(

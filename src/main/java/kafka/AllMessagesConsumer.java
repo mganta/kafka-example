@@ -18,15 +18,17 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 public class AllMessagesConsumer implements Runnable {
 	private final AtomicBoolean closed = new AtomicBoolean(false);
-	private final KafkaConsumer<String, String> consumer;
+	private Properties properties;
 
 	public AllMessagesConsumer(Properties properties)  {
-		consumer = new KafkaConsumer<String, String>(properties);
-	    consumer.subscribe(Arrays.asList(properties.getProperty("consumer_topic")));
+		this.properties = properties;
 	}
 
 	public void run() {
+		KafkaConsumer<String, String> consumer = null;
 		try {
+			consumer = new KafkaConsumer<String, String>(properties);
+		    consumer.subscribe(Arrays.asList(properties.getProperty("consumer_topic")));
 			while (!closed.get()) {
 				
 				ConsumerRecords<String, String> records = consumer.poll(10000);
@@ -53,7 +55,6 @@ public class AllMessagesConsumer implements Runnable {
 	// Shutdown hook 
 	public void shutdown() {
 		closed.set(true);
-		consumer.wakeup();
 	}
 
 	public static void main(String[] args) throws IOException  {

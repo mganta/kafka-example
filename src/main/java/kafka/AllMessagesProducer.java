@@ -16,17 +16,17 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 public class AllMessagesProducer implements Runnable {
 
 	private static String message = "Hello Kafka!!!";
-	private Producer<String, String> producer;
 	private static Properties properties;
 	private final AtomicBoolean closed = new AtomicBoolean(false);
 
 	public AllMessagesProducer(Properties props) {
 		properties = props;
-		producer = new KafkaProducer<String, String>(props);
 	}
 
 	public void run() {
+		Producer<String, String> producer = null;
 		try {
+			producer = new KafkaProducer<String, String>(properties);
 			while (!closed.get()) {
 				ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>(
 						properties.getProperty("producer_topic"),
