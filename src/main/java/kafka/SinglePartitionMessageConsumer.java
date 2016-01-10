@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.ConsumerWakeupException;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
 
@@ -69,7 +68,7 @@ public class SinglePartitionMessageConsumer implements Runnable {
 				System.out.println("single-partition-consumer batch done...");
 				consumer.commitSync();
 			}
-		} catch (ConsumerWakeupException | IllegalAccessException
+		} catch ( IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException
 				| ClassNotFoundException e) {

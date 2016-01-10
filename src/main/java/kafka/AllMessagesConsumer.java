@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.ConsumerWakeupException;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 
@@ -25,9 +24,7 @@ public class AllMessagesConsumer implements Runnable {
 	}
 
 	public void run() {
-		KafkaConsumer<String, String> consumer = null;
-		try {
-			consumer = new KafkaConsumer<String, String>(properties);
+			KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(properties);
 		    consumer.subscribe(Arrays.asList(properties.getProperty("consumer_topic")));
 			while (!closed.get()) {
 				
@@ -43,13 +40,7 @@ public class AllMessagesConsumer implements Runnable {
 				System.out.println("Consumer batch done...");
 				consumer.commitSync();
 			}
-		} catch (ConsumerWakeupException e) {
-			if (!closed.get())
-				throw e;
-		} finally {
 			consumer.close();
-		}
-
 	}
 
 	// Shutdown hook 
